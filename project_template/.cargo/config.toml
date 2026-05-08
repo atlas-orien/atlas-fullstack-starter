@@ -1,0 +1,2 @@
+[alias]
+manage = "run --manifest-path manager/Cargo.toml --"

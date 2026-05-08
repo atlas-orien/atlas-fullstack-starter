@@ -268,20 +268,21 @@ function Render-RootReadme {
     }
 
     $map = @{
-        '__PROJECT_NAME__'       = $ProjectNameValue
-        '__MANAGE_SCRIPT__'      = 'manage.ps1'
-        '__MANAGE_SCRIPT_DESC__' = 'Windows PowerShell 本地启动、停止前后端服务的脚本'
-        '__MANAGE_CMD__'         = '.\manage.ps1'
-        '__MANAGE_CODE_LANG__'   = 'powershell'
+        '__PROJECT_NAME__'     = $ProjectNameValue
+        '__MANAGE_ENTRY__'     = 'cargo manage'
+        '__MANAGE_DESC__'      = '跨平台管理前后端服务的 Rust CLI'
+        '__MANAGE_CMD__'       = 'cargo manage'
+        '__MANAGE_CODE_LANG__' = 'powershell'
     }
     Replace-InFile -Path $templatePath -Map $map
     Move-Item -LiteralPath $templatePath -Destination $readmePath -Force
 }
 
-function Keep-PlatformManageScript {
+function Remove-LegacyManageScripts {
     param([string]$ProjectDir)
 
     Remove-Item -LiteralPath (Join-Path $ProjectDir 'manage.sh') -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath (Join-Path $ProjectDir 'manage.ps1') -Force -ErrorAction SilentlyContinue
 }
 
 function Write-RootGitignore {
@@ -296,6 +297,7 @@ function Write-RootGitignore {
 
 output/
 temp/
+target/
 "@
 
     Set-Content -LiteralPath (Join-Path $ProjectDir '.gitignore') -Value $content -Encoding UTF8
@@ -371,7 +373,7 @@ try {
     Write-Host '==> Render root README and .gitignore'
     Render-RootReadme -ProjectDir $TargetDir -ProjectNameValue $ProjectName
     Write-RootGitignore -ProjectDir $TargetDir
-    Keep-PlatformManageScript -ProjectDir $TargetDir
+    Remove-LegacyManageScripts -ProjectDir $TargetDir
 
     Write-Host '==> Clean generated artifacts'
     Remove-GeneratedArtifacts -ProjectDir $TargetDir
@@ -398,9 +400,10 @@ try {
     Write-Host '  |- API_DOCS/'
     Write-Host '  |- frontend/'
     Write-Host '  |- backend/'
+    Write-Host '  |- manager/'
     Write-Host '  |- AGENTS.md'
     Write-Host '  |- README.md'
-    Write-Host '  |- manage.ps1'
+    Write-Host '  |- .cargo/'
     Write-Host '  |- AI_PROTOCOLS/'
     Write-Host '  `- .gitignore'
 }

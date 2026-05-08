@@ -208,17 +208,18 @@ render_root_readme() {
 
   sed \
     -e "s#__PROJECT_NAME__#$project_name#g" \
-    -e 's#__MANAGE_SCRIPT__#manage.sh#g' \
-    -e 's#__MANAGE_SCRIPT_DESC__#macOS / Linux 本地启动、停止前后端服务的脚本#g' \
-    -e 's#__MANAGE_CMD__#./manage.sh#g' \
+    -e 's#__MANAGE_ENTRY__#cargo manage#g' \
+    -e 's#__MANAGE_DESC__#跨平台管理前后端服务的 Rust CLI#g' \
+    -e 's#__MANAGE_CMD__#cargo manage#g' \
     -e 's#__MANAGE_CODE_LANG__#bash#g' \
     "$project_dir/ROOT_README.md.tpl" > "$project_dir/README.md"
   rm -f "$project_dir/ROOT_README.md.tpl"
 }
 
-keep_platform_manage_script() {
+remove_legacy_manage_scripts() {
   local project_dir="$1"
 
+  rm -f "$project_dir/manage.sh"
   rm -f "$project_dir/manage.ps1"
 }
 
@@ -234,6 +235,7 @@ write_root_gitignore() {
 
 output/
 temp/
+target/
 EOF
 }
 
@@ -312,7 +314,7 @@ unify_api_docs "$TARGET_DIR" "$BACKEND_DIR"
 echo "==> 渲染根目录 README 和 .gitignore"
 render_root_readme "$TARGET_DIR" "$PROJECT_NAME"
 write_root_gitignore "$TARGET_DIR"
-keep_platform_manage_script "$TARGET_DIR"
+remove_legacy_manage_scripts "$TARGET_DIR"
 
 echo "==> 清理模板残留文件"
 clean_generated_files "$TARGET_DIR"
@@ -334,8 +336,9 @@ echo "  ├── temp/"
 echo "  ├── API_DOCS/"
 echo "  ├── frontend/"
 echo "  ├── backend/"
+echo "  ├── manager/"
 echo "  ├── AGENTS.md"
 echo "  ├── README.md"
-echo "  ├── manage.sh"
+echo "  ├── .cargo/"
 echo "  ├── AI_PROTOCOLS/"
 echo "  └── .gitignore"

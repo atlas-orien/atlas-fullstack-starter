@@ -30,6 +30,7 @@
 2. `init.sh` 的输出目录结构提示是否需要更新
 3. `init.ps1` 的输出目录结构提示是否需要更新
 4. `README.md` 和 `project_template/ROOT_README.md.tpl` 是否需要提醒用户阅读该文件
+5. 如果改动生成后项目管理命令，必须同步更新 `project_template/manager/`
 
 ## 初始化流程约束
 

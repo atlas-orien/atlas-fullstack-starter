@@ -10,7 +10,7 @@
 - `API_DOCS/`：项目唯一 API 文档入口
 - `frontend/`：前端项目
 - `backend/`：后端项目
-- `__MANAGE_SCRIPT__`：__MANAGE_SCRIPT_DESC__
+- `__MANAGE_ENTRY__`：__MANAGE_DESC__
 - `AGENTS.md`：AI 统一入口，负责指向前端和后端子项目规则
 
 ## 快速开始
@@ -49,12 +49,12 @@ AI 负责：
 
 ## 常用命令
 
-本项目使用 `__MANAGE_SCRIPT__` 管理本地前后端服务。
+本项目使用 `__MANAGE_ENTRY__` 管理本地前后端服务。
 
 初始化前后端 env：
 
 ```__MANAGE_CODE_LANG__
-__MANAGE_CMD__ init_env
+__MANAGE_CMD__ init-env
 ```
 
 这个命令会同时初始化后端 env，并先执行前端 `pnpm install`，再生成前端 env 文件。
@@ -62,8 +62,8 @@ __MANAGE_CMD__ init_env
 也可以只初始化其中一端：
 
 ```__MANAGE_CODE_LANG__
-__MANAGE_CMD__ init_env backend
-__MANAGE_CMD__ init_env frontend
+__MANAGE_CMD__ init-env backend
+__MANAGE_CMD__ init-env frontend
 ```
 
 启动后端：
@@ -140,7 +140,7 @@ temp/logs/
 1. `temp/REQUIREMENTS/`：放需求文档，也可以不用，直接在聊天里描述需求
 2. `temp/DEVELOPMENT_DOCS/`：AI 写前后端开发文档
 3. `API_DOCS/`：AI 写 API 文档，框架已有 API 和新业务 API 都放这里
-4. `__MANAGE_SCRIPT__`：启动、停止、查看服务状态
+4. `__MANAGE_ENTRY__`：启动、停止、查看服务状态
 5. `frontend/`：前端代码
 6. `backend/`：后端代码
 
