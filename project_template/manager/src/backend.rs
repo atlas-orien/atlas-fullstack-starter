@@ -11,11 +11,7 @@ pub fn init_env() -> AppResult<()> {
     }
 
     println!("==> 初始化后端 env");
-    if !backend_dir.join(".env").exists() {
-        process::run_in("cargo", &["xtask", "init"], &backend_dir)?;
-    } else {
-        println!("后端 .env 已存在，跳过 cargo xtask init");
-    }
+    process::run_in("cargo", &["xtask", "init-env"], &backend_dir)?;
 
     println!("后端 env 已初始化");
     Ok(())
