@@ -58,12 +58,31 @@ __MANAGE_CMD__ init-env
 ```
 
 这个命令会同时初始化后端 env，并先执行前端 `pnpm install`，再生成前端 env 文件。
+它不会启动 Docker，也不会执行数据库迁移。
 
 也可以只初始化其中一端：
 
 ```__MANAGE_CODE_LANG__
 __MANAGE_CMD__ init-env backend
 __MANAGE_CMD__ init-env frontend
+```
+
+启动后端 Docker PostgreSQL 并确认数据库：
+
+```__MANAGE_CODE_LANG__
+__MANAGE_CMD__ backend db-up
+```
+
+执行后端数据库迁移：
+
+```__MANAGE_CODE_LANG__
+__MANAGE_CMD__ backend migrate
+```
+
+如果想一次完成数据库启动和迁移：
+
+```__MANAGE_CODE_LANG__
+__MANAGE_CMD__ backend setup-db
 ```
 
 启动后端：

@@ -17,12 +17,6 @@ pub fn init_env() -> AppResult<()> {
         println!("后端 .env 已存在，跳过 cargo xtask init");
     }
 
-    println!("==> 启动后端 PostgreSQL 并确认数据库");
-    process::run_in("cargo", &["xtask", "db", "up"], &backend_dir)?;
-
-    println!("==> 执行后端 migration");
-    process::run_in("cargo", &["xtask", "migrate", "up"], &backend_dir)?;
-
     println!("后端 env 已初始化");
     Ok(())
 }
@@ -57,8 +51,26 @@ pub fn run(action: &str) -> AppResult<()> {
             run("start")
         }
         "status" => process::print_status("backend", &pid_file),
+        "db-up" | "db_up" => db_up(),
+        "migrate" => migrate(),
+        "setup-db" | "setup_db" => {
+            db_up()?;
+            migrate()
+        }
         _ => Err(AppError::msg("未知 backend 动作")),
     }
+}
+
+fn db_up() -> AppResult<()> {
+    let backend_dir = paths::backend_dir();
+    println!("==> 启动后端 PostgreSQL 并确认数据库");
+    process::run_in("cargo", &["xtask", "db", "up"], &backend_dir)
+}
+
+fn migrate() -> AppResult<()> {
+    let backend_dir = paths::backend_dir();
+    println!("==> 执行后端 migration");
+    process::run_in("cargo", &["xtask", "migrate", "up"], &backend_dir)
 }
 
 fn backend_url(backend_dir: &Path) -> String {

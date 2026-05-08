@@ -97,6 +97,8 @@ pnpm --version
 ```bash
 cargo manage --help
 cargo manage init-env
+cargo manage backend db-up
+cargo manage backend migrate
 cargo manage backend start
 cargo manage frontend admin start
 ```

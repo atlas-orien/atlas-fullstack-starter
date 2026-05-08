@@ -71,6 +71,7 @@ fn print_usage() {
     println!(
         r#"用法：
   cargo manage init-env [frontend|backend]
+  cargo manage backend db-up|migrate|setup-db
   cargo manage backend start|stop|restart|status
   cargo manage frontend install
   cargo manage frontend <app> start|stop|restart|status
@@ -79,6 +80,9 @@ fn print_usage() {
   cargo manage init-env
   cargo manage init-env frontend
   cargo manage init-env backend
+  cargo manage backend db-up
+  cargo manage backend migrate
+  cargo manage backend setup-db
   cargo manage backend start
   cargo manage backend stop
   cargo manage frontend install
