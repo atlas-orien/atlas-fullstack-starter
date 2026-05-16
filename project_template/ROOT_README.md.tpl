@@ -143,6 +143,12 @@ temp/logs/
 output/atlas-fullstack-offline.tar.gz
 ```
 
+部署脚本的系统边界：
+
+- `deploy/build-release.sh` 只支持 macOS/Linux 的 Bash 环境。
+- `deploy/runtime/install.sh` 面向 Linux 服务器，用于实施人员现场安装。
+- Windows 开发者不需要执行部署打包脚本。
+
 ## 新对话提示词
 
 你可以在每次开启新对话时，把下面这段发给 AI：

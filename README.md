@@ -114,6 +114,12 @@ cargo manage frontend admin start
 
 这个命令用于生成离线交付包，产物默认放在 `output/` 下。
 
+部署脚本的系统边界：
+
+- `deploy/build-release.sh` 只支持 macOS/Linux 的 Bash 环境。
+- `deploy/runtime/install.sh` 面向 Linux 服务器，用于实施人员现场安装。
+- Windows 用户可以初始化和开发项目，但不提供 Windows 版部署打包脚本。
+
 ## 给用户的原则
 
 1. 先让 AI 检查环境

@@ -11,6 +11,12 @@
 
 ## 启动
 
+## 系统支持
+
+- `build-release.sh`：支持 macOS/Linux Bash 环境，用于打包人员生成离线交付包。
+- `runtime/install.sh`：支持 Linux 服务器，用于实施人员现场安装 Docker、加载镜像并启动服务。
+- Windows 不提供部署打包脚本；Windows 开发者不需要执行本目录脚本。
+
 生成最终离线交付包：
 
 ```bash

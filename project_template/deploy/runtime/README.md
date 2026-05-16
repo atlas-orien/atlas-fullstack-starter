@@ -2,6 +2,8 @@
 
 ## 安装
 
+本安装脚本只面向 Linux 服务器。Windows 和 macOS 不使用 `install.sh`。
+
 ```bash
 sudo ./install.sh
 ```
