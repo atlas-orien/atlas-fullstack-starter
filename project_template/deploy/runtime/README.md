@@ -13,7 +13,7 @@ sudo ./install.sh
 ```text
 1. 检查并安装 Docker
 2. 启动 Docker
-3. 加载 atlas-fullstack-images.tar
+3. 加载 __PROJECT_NAME__-images.tar
 4. 创建 .env
 5. 启动 docker compose
 ```

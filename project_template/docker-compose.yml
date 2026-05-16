@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: deploy/postgres/Dockerfile
-    image: ${IMAGE_PREFIX:-atlas-fullstack}-postgres:local
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-postgres:local
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "123456"
@@ -24,7 +24,7 @@ services:
     build:
       context: .
       dockerfile: deploy/backend/Dockerfile
-    image: ${IMAGE_PREFIX:-atlas-fullstack}-backend:local
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-backend:local
     depends_on:
       postgres:
         condition: service_healthy
@@ -34,7 +34,7 @@ services:
       dockerfile: deploy/frontend/Dockerfile
       args:
         APP_NAME: web
-    image: ${IMAGE_PREFIX:-atlas-fullstack}-web:local
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-web:local
     environment:
       API_UPSTREAM: ${API_UPSTREAM:-http://backend:19878}
       AUTH_UPSTREAM: ${AUTH_UPSTREAM:-http://1.85.61.130:29001}
@@ -50,7 +50,7 @@ services:
       dockerfile: deploy/frontend/Dockerfile
       args:
         APP_NAME: admin
-    image: ${IMAGE_PREFIX:-atlas-fullstack}-admin:local
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-admin:local
     environment:
       API_UPSTREAM: ${API_UPSTREAM:-http://backend:19878}
       AUTH_UPSTREAM: ${AUTH_UPSTREAM:-http://1.85.61.130:29001}

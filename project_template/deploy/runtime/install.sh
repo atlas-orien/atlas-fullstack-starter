@@ -58,7 +58,7 @@ compose() {
 install_docker
 start_docker
 
-IMAGE_TAR="${IMAGE_TAR:-atlas-fullstack-images.tar}"
+IMAGE_TAR="${IMAGE_TAR:-__PROJECT_NAME__-images.tar}"
 
 if [ ! -f "$IMAGE_TAR" ]; then
   echo "找不到 $IMAGE_TAR"

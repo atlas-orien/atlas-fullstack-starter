@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: ${IMAGE_PREFIX:-atlas-fullstack}-postgres:local
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-postgres:local
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456}
@@ -18,13 +18,13 @@ services:
       retries: 20
 
   backend:
-    image: ${IMAGE_PREFIX:-atlas-fullstack}-backend:local
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-backend:local
     depends_on:
       postgres:
         condition: service_healthy
 
   web:
-    image: ${IMAGE_PREFIX:-atlas-fullstack}-web:local
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-web:local
     environment:
       API_UPSTREAM: ${API_UPSTREAM:-http://backend:19878}
       AUTH_UPSTREAM: ${AUTH_UPSTREAM:-http://1.85.61.130:29001}
@@ -35,7 +35,7 @@ services:
       - "${WEB_PORT:-8080}:80"
 
   admin:
-    image: ${IMAGE_PREFIX:-atlas-fullstack}-admin:local
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-admin:local
     environment:
       API_UPSTREAM: ${API_UPSTREAM:-http://backend:19878}
       AUTH_UPSTREAM: ${AUTH_UPSTREAM:-http://1.85.61.130:29001}

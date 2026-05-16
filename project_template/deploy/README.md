@@ -30,7 +30,7 @@
 2. 编译前端 web/admin dist
 3. 编译后端 web-server/migration/xtask 静态 bin
 4. 构建最终 Docker 镜像
-5. 生成 output/atlas-fullstack-offline.tar.gz
+5. 生成 output/__PROJECT_NAME__-offline.tar.gz
 ```
 
 本机测试启动：
@@ -159,10 +159,10 @@ docker compose up --build
 脚本会生成：
 
 ```text
-output/atlas-fullstack-offline.tar.gz
-output/atlas-fullstack-offline/
+output/__PROJECT_NAME__-offline.tar.gz
+output/__PROJECT_NAME__-offline/
 ```
 
-`output/` 已被 `.gitignore` 忽略，不需要提交到 Git。把 `atlas-fullstack-offline.tar.gz` 交给实施人员即可。
+`output/` 已被 `.gitignore` 忽略，不需要提交到 Git。把 `__PROJECT_NAME__-offline.tar.gz` 交给实施人员即可。
 
 后端当前使用 Alpine builder 编译静态 `web-server`。最终交付镜像只需要复制 `web-server` 和运行配置；`migration` 与开发/初始化流程相关，不放入最终后端运行镜像。

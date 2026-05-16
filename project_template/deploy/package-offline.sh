@@ -3,10 +3,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-OUTPUT_DIR="${OUTPUT_DIR:-$PROJECT_DIR/output/atlas-fullstack-offline}"
-ARCHIVE_PATH="${ARCHIVE_PATH:-$PROJECT_DIR/output/atlas-fullstack-offline.tar.gz}"
-IMAGE_PREFIX="${IMAGE_PREFIX:-atlas-fullstack}"
-IMAGE_TAR="${IMAGE_TAR:-atlas-fullstack-images.tar}"
+OUTPUT_DIR="${OUTPUT_DIR:-$PROJECT_DIR/output/__PROJECT_NAME__-offline}"
+ARCHIVE_PATH="${ARCHIVE_PATH:-$PROJECT_DIR/output/__PROJECT_NAME__-offline.tar.gz}"
+IMAGE_PREFIX="${IMAGE_PREFIX:-__PROJECT_NAME__}"
+IMAGE_TAR="${IMAGE_TAR:-__PROJECT_NAME__-images.tar}"
 
 IMAGES=(
   "$IMAGE_PREFIX-postgres:local"

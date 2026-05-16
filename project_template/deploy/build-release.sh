@@ -12,7 +12,7 @@ if [ -f "$PROJECT_DIR/.env" ]; then
   set +a
 fi
 
-IMAGE_PREFIX="${IMAGE_PREFIX:-atlas-fullstack}"
+IMAGE_PREFIX="${IMAGE_PREFIX:-__PROJECT_NAME__}"
 
 echo "==> Preparing Rust builder"
 "$PROJECT_DIR/deploy/build-backend-base-images.sh"

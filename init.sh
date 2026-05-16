@@ -216,6 +216,24 @@ render_root_readme() {
   rm -f "$project_dir/ROOT_README.md.tpl"
 }
 
+render_project_placeholders() {
+  local project_dir="$1"
+  local project_name="$2"
+
+  find "$project_dir" -type f \
+    ! -path "$project_dir/.git/*" \
+    ! -path "$project_dir/frontend/node_modules/*" \
+    ! -path "$project_dir/backend/target/*" \
+    -print0 |
+    while IFS= read -r -d '' file; do
+      if LC_ALL=C grep -Iq . "$file" && grep -q '__PROJECT_NAME__' "$file"; then
+        tmp_file="$file.tmp"
+        sed -e "s#__PROJECT_NAME__#$project_name#g" "$file" > "$tmp_file"
+        mv "$tmp_file" "$file"
+      fi
+    done
+}
+
 remove_legacy_manage_scripts() {
   local project_dir="$1"
 
@@ -313,6 +331,7 @@ unify_api_docs "$TARGET_DIR" "$BACKEND_DIR"
 
 echo "==> 渲染根目录 README 和 .gitignore"
 render_root_readme "$TARGET_DIR" "$PROJECT_NAME"
+render_project_placeholders "$TARGET_DIR" "$PROJECT_NAME"
 write_root_gitignore "$TARGET_DIR"
 remove_legacy_manage_scripts "$TARGET_DIR"
 

@@ -278,6 +278,27 @@ function Render-RootReadme {
     Move-Item -LiteralPath $templatePath -Destination $readmePath -Force
 }
 
+function Render-ProjectPlaceholders {
+    param(
+        [string]$ProjectDir,
+        [string]$ProjectNameValue
+    )
+
+    Get-ChildItem -LiteralPath $ProjectDir -Recurse -File -Force |
+        Where-Object {
+            $_.FullName -notmatch '[\\/]\.git[\\/]' -and
+            $_.FullName -notmatch '[\\/]node_modules[\\/]' -and
+            $_.FullName -notmatch '[\\/]target[\\/]'
+        } |
+        ForEach-Object {
+            $content = Get-Content -LiteralPath $_.FullName -Raw -ErrorAction SilentlyContinue
+            if ($null -ne $content -and $content.Contains('__PROJECT_NAME__')) {
+                $content = $content.Replace('__PROJECT_NAME__', $ProjectNameValue)
+                Set-Content -LiteralPath $_.FullName -Value $content -Encoding UTF8
+            }
+        }
+}
+
 function Remove-LegacyManageScripts {
     param([string]$ProjectDir)
 
@@ -372,6 +393,7 @@ try {
 
     Write-Host '==> Render root README and .gitignore'
     Render-RootReadme -ProjectDir $TargetDir -ProjectNameValue $ProjectName
+    Render-ProjectPlaceholders -ProjectDir $TargetDir -ProjectNameValue $ProjectName
     Write-RootGitignore -ProjectDir $TargetDir
     Remove-LegacyManageScripts -ProjectDir $TargetDir
 

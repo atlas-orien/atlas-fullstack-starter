@@ -140,7 +140,7 @@ temp/logs/
 生成结果在：
 
 ```text
-output/atlas-fullstack-offline.tar.gz
+output/__PROJECT_NAME__-offline.tar.gz
 ```
 
 部署脚本的系统边界：
