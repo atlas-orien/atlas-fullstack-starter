@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: ${IMAGE_PREFIX:-atlas-fullstack}-postgres:local
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456}
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-123456}@%2Fvar%2Frun%2Fpostgresql/${POSTGRES_DB:-app}
+      APP_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-123456}@%2Fvar%2Frun%2Fpostgresql/${POSTGRES_DB:-app}
+      ROOT_IDENTIFIER: ${ROOT_IDENTIFIER:-test}
+      ROOT_PASSWORD: ${ROOT_PASSWORD:-12345678}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-app}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    image: ${IMAGE_PREFIX:-atlas-fullstack}-backend:local
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    image: ${IMAGE_PREFIX:-atlas-fullstack}-web:local
+    environment:
+      API_UPSTREAM: ${API_UPSTREAM:-http://backend:19878}
+      AUTH_UPSTREAM: ${AUTH_UPSTREAM:-http://1.85.61.130:29001}
+      FILE_UPSTREAM: ${FILE_UPSTREAM:-http://1.85.61.130:29002}
+    depends_on:
+      - backend
+    ports:
+      - "${WEB_PORT:-8080}:80"
+
+  admin:
+    image: ${IMAGE_PREFIX:-atlas-fullstack}-admin:local
+    environment:
+      API_UPSTREAM: ${API_UPSTREAM:-http://backend:19878}
+      AUTH_UPSTREAM: ${AUTH_UPSTREAM:-http://1.85.61.130:29001}
+      FILE_UPSTREAM: ${FILE_UPSTREAM:-http://1.85.61.130:29002}
+    depends_on:
+      - backend
+    ports:
+      - "${ADMIN_PORT:-8081}:80"
+
+volumes:
+  postgres_data:

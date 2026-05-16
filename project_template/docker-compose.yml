@@ -1,0 +1,64 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: deploy/postgres/Dockerfile
+    image: ${IMAGE_PREFIX:-atlas-fullstack}-postgres:local
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: app
+      DATABASE_URL: postgres://postgres:123456@%2Fvar%2Frun%2Fpostgresql/app
+      APP_DATABASE_URL: postgres://postgres:123456@%2Fvar%2Frun%2Fpostgresql/app
+      ROOT_IDENTIFIER: test
+      ROOT_PASSWORD: "12345678"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d app"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: deploy/backend/Dockerfile
+    image: ${IMAGE_PREFIX:-atlas-fullstack}-backend:local
+    depends_on:
+      postgres:
+        condition: service_healthy
+  web:
+    build:
+      context: .
+      dockerfile: deploy/frontend/Dockerfile
+      args:
+        APP_NAME: web
+    image: ${IMAGE_PREFIX:-atlas-fullstack}-web:local
+    environment:
+      API_UPSTREAM: ${API_UPSTREAM:-http://backend:19878}
+      AUTH_UPSTREAM: ${AUTH_UPSTREAM:-http://1.85.61.130:29001}
+      FILE_UPSTREAM: ${FILE_UPSTREAM:-http://1.85.61.130:29002}
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+  admin:
+    build:
+      context: .
+      dockerfile: deploy/frontend/Dockerfile
+      args:
+        APP_NAME: admin
+    image: ${IMAGE_PREFIX:-atlas-fullstack}-admin:local
+    environment:
+      API_UPSTREAM: ${API_UPSTREAM:-http://backend:19878}
+      AUTH_UPSTREAM: ${AUTH_UPSTREAM:-http://1.85.61.130:29001}
+      FILE_UPSTREAM: ${FILE_UPSTREAM:-http://1.85.61.130:29002}
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"
+
+volumes:
+  postgres_data:

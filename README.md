@@ -106,6 +106,14 @@ cargo manage frontend admin start
 `cargo manage` 会通过 Cargo 自动编译生成项目里的 `manager/` 工具，不需要使用
 `manage.sh` 或 `manage.ps1`。
 
+生成后的项目也会包含 Docker 部署目录：
+
+```bash
+./deploy/build-release.sh
+```
+
+这个命令用于生成离线交付包，产物默认放在 `output/` 下。
+
 ## 给用户的原则
 
 1. 先让 AI 检查环境

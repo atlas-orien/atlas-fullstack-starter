@@ -10,6 +10,7 @@
 - `API_DOCS/`：项目唯一 API 文档入口
 - `frontend/`：前端项目
 - `backend/`：后端项目
+- `deploy/`：Docker 构建、离线打包和实施安装脚本
 - `__MANAGE_ENTRY__`：__MANAGE_DESC__
 - `AGENTS.md`：AI 统一入口，负责指向前端和后端子项目规则
 
@@ -128,6 +129,18 @@ __MANAGE_CMD__ frontend admin status
 
 ```text
 temp/logs/
+```
+
+生成 Docker 离线交付包：
+
+```bash
+./deploy/build-release.sh
+```
+
+生成结果在：
+
+```text
+output/atlas-fullstack-offline.tar.gz
 ```
 
 ## 新对话提示词

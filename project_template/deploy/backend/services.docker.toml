@@ -1,0 +1,32 @@
+[http]
+port = 19878
+
+[jwt_verify]
+url = "http://1.85.61.130:29001/internal/jwt_verify_config"
+header = "x-internal-token"
+token = "dev-internal-token-change-me"
+
+[[db]]
+name = "app"
+url = "postgres://postgres:123456@postgres:5432/app"
+max_connections = 10
+min_connections = 1
+connect_timeout = 30
+idle_timeout = 600
+sql_logging = false
+
+[s3]
+endpoint = "http://127.0.0.1:9000"
+public_bucket = "public"
+private_bucket = "private"
+region = "us-east-1"
+access_key = "CHANGE_ME"
+secret_key = "CHANGE_ME"
+user_key_salt = "please-change-to-random-long-string"
+
+[[llm]]
+name = "ollama-gemma4"
+base_url = "http://127.0.0.1:11434"
+model = "gemma4:26b"
+max_tokens = 20000
+temperature = 0.2
