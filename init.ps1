@@ -213,11 +213,26 @@ function Replace-InFile {
         [hashtable]$Map
     )
 
+    $unixMode = $null
+    if (-not $IsWindows) {
+        $modeOutput = & stat -f '%OLp' $Path 2>$null
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($modeOutput)) {
+            $modeOutput = & stat -c '%a' $Path 2>$null
+        }
+        if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($modeOutput)) {
+            $unixMode = $modeOutput.Trim()
+        }
+    }
+
     $content = Get-Content -LiteralPath $Path -Raw
     foreach ($key in $Map.Keys) {
         $content = $content.Replace($key, $Map[$key])
     }
     Set-Content -LiteralPath $Path -Value $content -Encoding UTF8
+
+    if ($unixMode) {
+        chmod $unixMode $Path
+    }
 }
 
 function Merge-ApiDocs {
@@ -291,10 +306,25 @@ function Render-ProjectPlaceholders {
             $_.FullName -notmatch '[\\/]target[\\/]'
         } |
         ForEach-Object {
+            $path = $_.FullName
+            $unixMode = $null
+            if (-not $IsWindows) {
+                $modeOutput = & stat -f '%OLp' $path 2>$null
+                if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($modeOutput)) {
+                    $modeOutput = & stat -c '%a' $path 2>$null
+                }
+                if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($modeOutput)) {
+                    $unixMode = $modeOutput.Trim()
+                }
+            }
+
             $content = Get-Content -LiteralPath $_.FullName -Raw -ErrorAction SilentlyContinue
             if ($null -ne $content -and $content.Contains('__PROJECT_NAME__')) {
                 $content = $content.Replace('__PROJECT_NAME__', $ProjectNameValue)
-                Set-Content -LiteralPath $_.FullName -Value $content -Encoding UTF8
+                Set-Content -LiteralPath $path -Value $content -Encoding UTF8
+                if ($unixMode) {
+                    chmod $unixMode $path
+                }
             }
         }
 }

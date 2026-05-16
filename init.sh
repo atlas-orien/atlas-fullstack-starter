@@ -228,8 +228,10 @@ render_project_placeholders() {
     while IFS= read -r -d '' file; do
       if LC_ALL=C grep -Iq . "$file" && grep -q '__PROJECT_NAME__' "$file"; then
         tmp_file="$file.tmp"
+        file_mode="$(stat -f '%OLp' "$file" 2>/dev/null || stat -c '%a' "$file")"
         sed -e "s#__PROJECT_NAME__#$project_name#g" "$file" > "$tmp_file"
         mv "$tmp_file" "$file"
+        chmod "$file_mode" "$file"
       fi
     done
 }
