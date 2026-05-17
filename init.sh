@@ -4,11 +4,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 DEFAULT_OUTPUT_DIR="$(pwd)"
 
-STARTER_REPO_DEFAULT="https://github.com/atlas-form/atlas-fullstack-starter.git"
+STARTER_REPO_DEFAULT="https://github.com/atlas-orien/atlas-fullstack-starter.git"
 STARTER_REF_DEFAULT="main"
-BACKEND_SOURCE_DEFAULT="https://github.com/atlas-form/db-center-template.git"
+BACKEND_SOURCE_DEFAULT="https://github.com/atlas-orien/db-center-template.git"
 BACKEND_REF_DEFAULT="main"
-FRONTEND_SOURCE_DEFAULT="https://github.com/atlas-form/react-mono-template.git"
+FRONTEND_SOURCE_DEFAULT="https://github.com/atlas-orien/react-mono-template.git"
 FRONTEND_REF_DEFAULT="main"
 
 require_command() {
@@ -28,8 +28,8 @@ usage() {
   ./init.sh my-app /Users/ancient/workspace
 
 远程执行示例：
-  curl -fsSL https://raw.githubusercontent.com/atlas-form/atlas-fullstack-starter/main/init.sh | bash -s -- my-app
-  curl -fsSL https://raw.githubusercontent.com/atlas-form/atlas-fullstack-starter/main/init.sh | bash -s -- my-app /Users/ancient/src
+  curl -fsSL https://raw.githubusercontent.com/atlas-orien/atlas-fullstack-starter/main/init.sh | bash -s -- my-app
+  curl -fsSL https://raw.githubusercontent.com/atlas-orien/atlas-fullstack-starter/main/init.sh | bash -s -- my-app /Users/ancient/src
 
 可选环境变量：
   STARTER_REPO     脚手架仓库地址，用于远程执行时拉取文档模板

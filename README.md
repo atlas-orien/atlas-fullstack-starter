@@ -42,7 +42,7 @@ macOS / Linux 还需要系统里有 `curl`、`bash`、`tar`。Windows 请使用 
 ### macOS / Linux
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/atlas-form/atlas-fullstack-starter/main/init.sh | bash -s -- my-app
+curl -fsSL https://raw.githubusercontent.com/atlas-orien/atlas-fullstack-starter/main/init.sh | bash -s -- my-app
 ```
 
 ### Windows PowerShell
@@ -56,7 +56,7 @@ cd D:\tmp
 然后复制下面这一整行命令执行：
 
 ```powershell
-$script = Join-Path $env:TEMP "atlas-fullstack-init.ps1"; irm https://raw.githubusercontent.com/atlas-form/atlas-fullstack-starter/main/init.ps1 -OutFile $script; & $script -ProjectName my-app
+$script = Join-Path $env:TEMP "atlas-fullstack-init.ps1"; irm https://raw.githubusercontent.com/atlas-orien/atlas-fullstack-starter/main/init.ps1 -OutFile $script; & $script -ProjectName my-app
 ```
 
 如果要换项目名，把最后的 `my-app` 改成自己的项目名即可。

@@ -10,11 +10,11 @@ $ErrorActionPreference = 'Stop'
 
 $InvocationPath = $MyInvocation.MyCommand.Path
 $ScriptDir = if ([string]::IsNullOrWhiteSpace($InvocationPath)) { $null } else { Split-Path -Parent $InvocationPath }
-$StarterRepoDefault = 'https://github.com/atlas-form/atlas-fullstack-starter.git'
+$StarterRepoDefault = 'https://github.com/atlas-orien/atlas-fullstack-starter.git'
 $StarterRefDefault = 'main'
-$BackendSourceDefault = 'https://github.com/atlas-form/db-center-template.git'
+$BackendSourceDefault = 'https://github.com/atlas-orien/db-center-template.git'
 $BackendRefDefault = 'main'
-$FrontendSourceDefault = 'https://github.com/atlas-form/react-mono-template.git'
+$FrontendSourceDefault = 'https://github.com/atlas-orien/react-mono-template.git'
 $FrontendRefDefault = 'main'
 
 function Show-Usage {
