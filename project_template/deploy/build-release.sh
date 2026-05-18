@@ -15,6 +15,22 @@ fi
 IMAGE_PREFIX="${IMAGE_PREFIX:-__PROJECT_NAME__}"
 BACKEND_ARTIFACT_DIR="/workspace/deploy/artifacts/backend"
 
+ensure_image() {
+  local image="$1"
+
+  if docker image inspect "$image" >/dev/null 2>&1; then
+    echo "found $image"
+    return 0
+  fi
+
+  echo "==> Pulling missing image $image"
+  if ! docker pull "$image"; then
+    echo "缺少镜像：$image"
+    echo "请先在打包机准备该镜像，例如：docker pull $image"
+    exit 1
+  fi
+}
+
 echo "==> Preparing Rust builder"
 "$PROJECT_DIR/deploy/build-backend-base-images.sh"
 
@@ -37,7 +53,7 @@ docker run --rm \
   sh -c 'rm -rf "$CARGO_TARGET_DIR" "$BACKEND_ARTIFACT_DIR" && if [ ! -f Cargo.lock ]; then cargo generate-lockfile; fi && cargo build --release --locked -p web-server -p migration -p xtask && mkdir -p "$BACKEND_ARTIFACT_DIR" && cp "$CARGO_TARGET_DIR/release/web-server" "$CARGO_TARGET_DIR/release/migration" "$CARGO_TARGET_DIR/release/xtask" "$BACKEND_ARTIFACT_DIR"/'
 
 echo "==> Building runtime images"
-docker compose pull postgres
+ensure_image postgres:latest
 docker compose build --no-cache db-init backend web admin
 
 echo "==> Verifying runtime images"
