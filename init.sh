@@ -216,6 +216,12 @@ render_root_readme() {
   rm -f "$project_dir/ROOT_README.md.tpl"
 }
 
+get_file_mode() {
+  local file="$1"
+
+  stat -c '%a' "$file" 2>/dev/null || stat -f '%OLp' "$file"
+}
+
 render_project_placeholders() {
   local project_dir="$1"
   local project_name="$2"
@@ -228,7 +234,7 @@ render_project_placeholders() {
     while IFS= read -r -d '' file; do
       if LC_ALL=C grep -Iq . "$file" && grep -q '__PROJECT_NAME__' "$file"; then
         tmp_file="$file.tmp"
-        file_mode="$(stat -f '%OLp' "$file" 2>/dev/null || stat -c '%a' "$file")"
+        file_mode="$(get_file_mode "$file")"
         sed -e "s#__PROJECT_NAME__#$project_name#g" "$file" > "$tmp_file"
         mv "$tmp_file" "$file"
         chmod "$file_mode" "$file"

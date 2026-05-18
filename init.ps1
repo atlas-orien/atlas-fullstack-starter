@@ -207,22 +207,31 @@ function Copy-ProjectTemplate {
     Copy-DirectoryContents -SourceDir $TemplateSourceDir -TargetDir $ProjectDir
 }
 
+function Get-UnixMode {
+    param([string]$Path)
+
+    if ($IsWindows) {
+        return $null
+    }
+
+    $modeOutput = & stat -c '%a' $Path 2>$null
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($modeOutput)) {
+        $modeOutput = & stat -f '%OLp' $Path 2>$null
+    }
+    if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($modeOutput)) {
+        return $modeOutput.Trim()
+    }
+
+    return $null
+}
+
 function Replace-InFile {
     param(
         [string]$Path,
         [hashtable]$Map
     )
 
-    $unixMode = $null
-    if (-not $IsWindows) {
-        $modeOutput = & stat -f '%OLp' $Path 2>$null
-        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($modeOutput)) {
-            $modeOutput = & stat -c '%a' $Path 2>$null
-        }
-        if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($modeOutput)) {
-            $unixMode = $modeOutput.Trim()
-        }
-    }
+    $unixMode = Get-UnixMode -Path $Path
 
     $content = Get-Content -LiteralPath $Path -Raw
     foreach ($key in $Map.Keys) {
@@ -307,16 +316,7 @@ function Render-ProjectPlaceholders {
         } |
         ForEach-Object {
             $path = $_.FullName
-            $unixMode = $null
-            if (-not $IsWindows) {
-                $modeOutput = & stat -f '%OLp' $path 2>$null
-                if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($modeOutput)) {
-                    $modeOutput = & stat -c '%a' $path 2>$null
-                }
-                if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($modeOutput)) {
-                    $unixMode = $modeOutput.Trim()
-                }
-            }
+            $unixMode = Get-UnixMode -Path $path
 
             $content = Get-Content -LiteralPath $_.FullName -Raw -ErrorAction SilentlyContinue
             if ($null -ne $content -and $content.Contains('__PROJECT_NAME__')) {
