@@ -36,10 +36,14 @@ cp "$PROJECT_DIR/deploy/runtime/install.sh" "$OUTPUT_DIR/install.sh"
 cp "$PROJECT_DIR/deploy/runtime/README.md" "$OUTPUT_DIR/README.md"
 chmod +x "$OUTPUT_DIR/install.sh"
 
+TAR_ARGS=()
 if tar --help 2>/dev/null | grep -q -- '--no-xattrs'; then
-  COPYFILE_DISABLE=1 tar --no-xattrs --no-mac-metadata -czf "$ARCHIVE_PATH" -C "$(dirname "$OUTPUT_DIR")" "$(basename "$OUTPUT_DIR")"
-else
-  COPYFILE_DISABLE=1 tar -czf "$ARCHIVE_PATH" -C "$(dirname "$OUTPUT_DIR")" "$(basename "$OUTPUT_DIR")"
+  TAR_ARGS+=(--no-xattrs)
 fi
+if tar --help 2>/dev/null | grep -q -- '--no-mac-metadata'; then
+  TAR_ARGS+=(--no-mac-metadata)
+fi
+
+COPYFILE_DISABLE=1 tar "${TAR_ARGS[@]}" -czf "$ARCHIVE_PATH" -C "$(dirname "$OUTPUT_DIR")" "$(basename "$OUTPUT_DIR")"
 
 echo "离线安装包已生成：$ARCHIVE_PATH"
