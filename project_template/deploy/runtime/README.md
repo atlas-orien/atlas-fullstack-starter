@@ -5,17 +5,18 @@
 本安装脚本只面向 Linux 服务器。Windows 和 macOS 不使用 `install.sh`。
 
 ```bash
-sudo ./install.sh
+./install.sh
 ```
+
+执行前请先确认服务器已经安装并启动 Docker，且已安装 Docker Compose plugin。
 
 安装脚本会：
 
 ```text
-1. 检查并安装 Docker
-2. 启动 Docker
-3. 加载 __PROJECT_NAME__-images.tar
-4. 创建 .env
-5. 启动 docker compose
+1. 检查 Docker 和 Docker Compose plugin
+2. 加载 __PROJECT_NAME__-images.tar
+3. 创建 .env
+4. 启动 docker compose
 ```
 
 ## 访问
