@@ -30,10 +30,10 @@ Admin: http://服务器IP:8081
 
 ## 配置
 
-需要调整端口、auth/file 服务地址或 root 账号时，修改 `.env` 后执行：
+需要调整端口、auth/file 服务地址、root 账号或数据库数据目录时，修改 `.env` 后执行：
 
 ```bash
 docker compose up -d
 ```
 
-数据库数据保存在 Docker volume 中。不要执行 `docker compose down -v`，除非明确要删除数据库数据。
+数据库数据默认保存在安装目录下的 `./data/postgres`，可通过 `.env` 中的 `POSTGRES_DATA_DIR` 修改。

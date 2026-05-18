@@ -40,7 +40,7 @@ fi
 
 docker load -i "$IMAGE_TAR"
 compose up -d postgres
-docker compose --profile tools run --rm db-init
+compose --profile tools run --rm db-init
 compose up -d backend web admin
 
 echo "安装完成"
