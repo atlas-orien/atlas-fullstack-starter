@@ -7,10 +7,9 @@
 !**/.env.example
 
 backend/target/*
-backend/target/release/*
-!backend/target/release/web-server
-!backend/target/release/migration
-!backend/target/release/xtask
+deploy/artifacts/*
+!deploy/artifacts/backend
+!deploy/artifacts/backend/*
 frontend/node_modules
 frontend/**/node_modules
 frontend/**/dist

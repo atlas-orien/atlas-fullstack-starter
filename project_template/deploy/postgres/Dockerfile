@@ -1,7 +1,7 @@
 FROM postgres:latest
 
-COPY backend/target/release/migration /usr/local/bin/migration
-COPY backend/target/release/xtask /usr/local/bin/xtask
+COPY deploy/artifacts/backend/migration /usr/local/bin/migration
+COPY deploy/artifacts/backend/xtask /usr/local/bin/xtask
 COPY deploy/backend/services.docker.toml /app/config/services.toml
 COPY deploy/postgres/init-database.sh /docker-entrypoint-initdb.d/10-init-database.sh
 

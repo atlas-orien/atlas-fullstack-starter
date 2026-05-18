@@ -13,6 +13,7 @@ if [ -f "$PROJECT_DIR/.env" ]; then
 fi
 
 IMAGE_PREFIX="${IMAGE_PREFIX:-__PROJECT_NAME__}"
+BACKEND_ARTIFACT_DIR="/workspace/deploy/artifacts/backend"
 
 echo "==> Preparing Rust builder"
 "$PROJECT_DIR/deploy/build-backend-base-images.sh"
@@ -26,13 +27,14 @@ echo "==> Building Rust static binaries"
 docker run --rm \
   -e CARGO_HOME=/cargo-cache \
   -e CARGO_TARGET_DIR=/tmp/cargo-target \
+  -e BACKEND_ARTIFACT_DIR="$BACKEND_ARTIFACT_DIR" \
   -e OPENSSL_STATIC=1 \
   -e PKG_CONFIG_ALLOW_CROSS=1 \
   -v "$PROJECT_DIR:/workspace" \
   -v "$HOME/.cargo:/cargo-cache" \
   -w /workspace/backend \
   rust-builder:alpine \
-  sh -c 'rm -rf "$CARGO_TARGET_DIR" && if [ ! -f Cargo.lock ]; then cargo generate-lockfile; fi && cargo build --release --locked -p web-server -p migration -p xtask && mkdir -p target/release && cp "$CARGO_TARGET_DIR/release/web-server" "$CARGO_TARGET_DIR/release/migration" "$CARGO_TARGET_DIR/release/xtask" target/release/'
+  sh -c 'rm -rf "$CARGO_TARGET_DIR" "$BACKEND_ARTIFACT_DIR" && if [ ! -f Cargo.lock ]; then cargo generate-lockfile; fi && cargo build --release --locked -p web-server -p migration -p xtask && mkdir -p "$BACKEND_ARTIFACT_DIR" && cp "$CARGO_TARGET_DIR/release/web-server" "$CARGO_TARGET_DIR/release/migration" "$CARGO_TARGET_DIR/release/xtask" "$BACKEND_ARTIFACT_DIR"/'
 
 echo "==> Building runtime images"
 docker compose build postgres backend

@@ -348,6 +348,7 @@ function Write-RootGitignore {
 
 output/
 temp/
+deploy/artifacts/
 target/
 "@
 

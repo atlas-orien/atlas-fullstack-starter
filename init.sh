@@ -255,6 +255,7 @@ write_root_gitignore() {
 
 output/
 temp/
+deploy/artifacts/
 target/
 EOF
 }
