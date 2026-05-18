@@ -4,7 +4,8 @@
 
 ## 服务
 
-- `postgres`: 基于官方 PostgreSQL latest 的项目数据库镜像，数据保存在 `postgres_data` volume。PostgreSQL 18+ 使用 `/var/lib/postgresql` 作为 volume 挂载点。
+- `postgres`: 使用官方 PostgreSQL latest 镜像，数据保存在 `postgres_data` volume。PostgreSQL 18+ 使用 `/var/lib/postgresql` 作为 volume 挂载点。
+- `db-init`: 一次性数据库初始化镜像，包含 `migration` 和 `xtask`，由安装脚本通过 `docker compose run --rm db-init` 执行，不保留容器。
 - `backend`: Rust `web-server` 服务，监听 `19878`。
 - `web`: Vite `apps/web` 构建产物，由 nginx 托管，宿主端口 `8080`。
 - `admin`: Vite `apps/admin` 构建产物，由 nginx 托管，宿主端口 `8081`。
@@ -29,7 +30,7 @@
 1. 检查并准备 rust-builder:alpine
 2. 编译前端 web/admin dist
 3. 编译后端 web-server/migration/xtask 静态 bin
-4. 构建最终 Docker 镜像
+4. 拉取官方 postgres 镜像，并构建 db-init/backend/web/admin 镜像
 5. 生成 output/__PROJECT_NAME__-offline.tar.gz
 ```
 

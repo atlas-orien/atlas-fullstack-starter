@@ -16,7 +16,9 @@
 1. 检查 Docker 和 Docker Compose plugin
 2. 加载 __PROJECT_NAME__-images.tar
 3. 创建 .env
-4. 启动 docker compose
+4. 启动 postgres
+5. 通过 `docker compose run --rm db-init` 执行一次性数据库初始化
+6. 启动 backend、web、admin
 ```
 
 ## 访问

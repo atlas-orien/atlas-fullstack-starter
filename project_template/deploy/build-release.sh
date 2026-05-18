@@ -37,11 +37,13 @@ docker run --rm \
   sh -c 'rm -rf "$CARGO_TARGET_DIR" "$BACKEND_ARTIFACT_DIR" && if [ ! -f Cargo.lock ]; then cargo generate-lockfile; fi && cargo build --release --locked -p web-server -p migration -p xtask && mkdir -p "$BACKEND_ARTIFACT_DIR" && cp "$CARGO_TARGET_DIR/release/web-server" "$CARGO_TARGET_DIR/release/migration" "$CARGO_TARGET_DIR/release/xtask" "$BACKEND_ARTIFACT_DIR"/'
 
 echo "==> Building runtime images"
-docker compose build --no-cache postgres backend web admin
+docker compose pull postgres
+docker compose build --no-cache db-init backend web admin
 
 echo "==> Verifying runtime images"
 for image in \
-  "$IMAGE_PREFIX-postgres:local" \
+  "postgres:latest" \
+  "$IMAGE_PREFIX-db-init:local" \
   "$IMAGE_PREFIX-backend:local" \
   "$IMAGE_PREFIX-web:local" \
   "$IMAGE_PREFIX-admin:local"

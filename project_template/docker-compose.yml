@@ -1,17 +1,10 @@
 services:
   postgres:
-    build:
-      context: .
-      dockerfile: deploy/postgres/Dockerfile
-    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-postgres:local
+    image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "123456"
       POSTGRES_DB: app
-      DATABASE_URL: postgres://postgres:123456@%2Fvar%2Frun%2Fpostgresql/app
-      APP_DATABASE_URL: postgres://postgres:123456@%2Fvar%2Frun%2Fpostgresql/app
-      ROOT_IDENTIFIER: test
-      ROOT_PASSWORD: "12345678"
     volumes:
       - postgres_data:/var/lib/postgresql
     healthcheck:
@@ -19,6 +12,22 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
+
+  db-init:
+    build:
+      context: .
+      dockerfile: deploy/db-init/Dockerfile
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-db-init:local
+    environment:
+      DATABASE_URL: postgres://postgres:123456@postgres:5432/app
+      APP_DATABASE_URL: postgres://postgres:123456@postgres:5432/app
+      ROOT_IDENTIFIER: test
+      ROOT_PASSWORD: "12345678"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - tools
 
   backend:
     build:

@@ -1,14 +1,10 @@
 services:
   postgres:
-    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-postgres:local
+    image: postgres:latest
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456}
       POSTGRES_DB: ${POSTGRES_DB:-app}
-      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-123456}@%2Fvar%2Frun%2Fpostgresql/${POSTGRES_DB:-app}
-      APP_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-123456}@%2Fvar%2Frun%2Fpostgresql/${POSTGRES_DB:-app}
-      ROOT_IDENTIFIER: ${ROOT_IDENTIFIER:-test}
-      ROOT_PASSWORD: ${ROOT_PASSWORD:-12345678}
     volumes:
       - postgres_data:/var/lib/postgresql
     healthcheck:
@@ -16,6 +12,19 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
+
+  db-init:
+    image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-db-init:local
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-123456}@postgres:5432/${POSTGRES_DB:-app}
+      APP_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-123456}@postgres:5432/${POSTGRES_DB:-app}
+      ROOT_IDENTIFIER: ${ROOT_IDENTIFIER:-test}
+      ROOT_PASSWORD: ${ROOT_PASSWORD:-12345678}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - tools
 
   backend:
     image: ${IMAGE_PREFIX:-__PROJECT_NAME__}-backend:local

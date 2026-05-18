@@ -9,7 +9,8 @@ IMAGE_PREFIX="${IMAGE_PREFIX:-__PROJECT_NAME__}"
 IMAGE_TAR="${IMAGE_TAR:-__PROJECT_NAME__-images.tar}"
 
 IMAGES=(
-  "$IMAGE_PREFIX-postgres:local"
+  postgres:latest
+  "$IMAGE_PREFIX-db-init:local"
   "$IMAGE_PREFIX-backend:local"
   "$IMAGE_PREFIX-web:local"
   "$IMAGE_PREFIX-admin:local"
